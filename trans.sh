@@ -3,7 +3,9 @@
 # define color codes
 BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
-NC='\033[0m'        # No Color
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'            # No Color
 
 # You need to replace this with a real access token
 ACCESS_TOKEN="your_access_token"
@@ -19,7 +21,7 @@ fi
 
 INPUT_TEXT="$1"
 # echo -e "${BLUE}Input text: $INPUT_TEXT${NC}"
-echo -e "Input text: ${BLUE}$INPUT_TEXT${NC}"
+echo -e "${RED}Input text:${NC} ${BLUE}$INPUT_TEXT${NC}"
 
 # auto-detect source and target languages
 if [[ "$INPUT_TEXT" =~ [a-zA-Z] ]]; then
@@ -47,7 +49,7 @@ echo -e "-------------------"
 # get the main translation result
 MAIN_TRANSLATION=$(echo "$RESPONSE" | jq -r .data)
 # echo -e "${YELLOW}Primary: $MAIN_TRANSLATION${NC}"
-echo -e "Primary: $MAIN_TRANSLATION"
+echo -e "${GREEN}Primary:${NC} $MAIN_TRANSLATION"
 
 # get all possible translations
 # echo -e "\n${YELLOW}Alternatives:${NC}"
