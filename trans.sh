@@ -23,13 +23,23 @@ INPUT_TEXT="$1"
 # echo -e "${BLUE}Input text: $INPUT_TEXT${NC}"
 echo -e "${RED}Input text:${NC} ${BLUE}$INPUT_TEXT${NC}"
 
+# 检测是否包含中文字符的函数
+has_chinese() {
+    local text="$1"
+    # 使用 grep 检测中文字符，包括：
+    # CJK统一汉字 (0x4E00-0x9FFF)
+    # CJK扩展A区 (0x3400-0x4DBF)
+    # CJK扩展B区 (0x20000-0x2A6DF)
+    echo "$text" | grep -q '[一-龥]'
+}
+
 # auto-detect source and target languages
-if [[ "$INPUT_TEXT" =~ [a-zA-Z] ]]; then
-    SOURCE_LANG="EN"
-    TARGET_LANG="ZH"
-else
+if has_chinese "$INPUT_TEXT"; then
     SOURCE_LANG="ZH"
     TARGET_LANG="EN"
+else
+    SOURCE_LANG="EN"
+    TARGET_LANG="ZH"
 fi
 
 # call the API to translate
@@ -56,5 +66,6 @@ echo -e "${GREEN}Primary:${NC} $MAIN_TRANSLATION"
 echo -e "\n${YELLOW}Alternatives:${NC}"
 echo "$RESPONSE" | jq -r '.alternatives[]' | while read -r line; do
     # echo -e "${YELLOW}- $line${NC}"
+
     echo -e "- $line"
 done
